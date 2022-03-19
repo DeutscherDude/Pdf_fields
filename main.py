@@ -1,5 +1,5 @@
 import PyPDF2 as pypdf
-from overwriting import insert_new_row
+from overwriting import insert_new_row, insert_to_cells
 import xlsxwriter
 
 def findInDict(needle, haystack):
@@ -15,37 +15,19 @@ def findInDict(needle, haystack):
             if x is not None:
                 return x
 
+dest_cells = ['B3', 'B6', 'C10', 'C14', 'C17', 'C20', 'C22', 'C24']
 
 if __name__ == '__main__':
 
 
-    pdf_object = open('Ex_pdf.pdf', 'rb')
+    pdf_object = open('form.pdf', 'rb')
     pdf = pypdf.PdfFileReader(pdf_object)
     
     answers_dict = pdf.getFormTextFields()
 
+    # all_fields_dict = pdf.getFields()
+    # to_delete = ['FT', '/Tx', '/T', '/TU', '/V', '/DV']
+
     insert_new_row(list(answers_dict.values()), "test.xlsx")
-
-
-    # row = 1
-    # col = 0
-
-    # workbook = xlsxwriter.Workbook('test.xlsx')
-    # worksheet = workbook.add_worksheet()
-    # bold = workbook.add_format({'bold': 1})
-
-    # for key, value in answers_dict.items():
-    #     worksheet.write(0, col, key, bold)
-    #     col += 1
-
-    # col = 0
-
-    # for key, value in answers_dict.items():
-    #     print(f"{key}: {value}")
-    #     worksheet.write_string(row, col, value)
-    #     col += 1
-
-    # workbook.close()
-
-    # xfa = findInDict('/XFA', pdf.resolvedObjects)
-    
+    insert_to_cells(list(answers_dict.values()), "test.xlsx", dest_cells)
+    pdf_object.close()
